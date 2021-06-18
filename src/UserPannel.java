@@ -1,11 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 public class UserPannel extends JPanel {
     private JLabel burger_label;
     private JComboBox Burger_box;
+    ArrayList<Burger>burger= new ArrayList<>();
 
     public UserPannel()
     {
@@ -24,27 +26,28 @@ public class UserPannel extends JPanel {
         Border fullborder=BorderFactory.createCompoundBorder(outerborder,innerborder);
         setBorder(fullborder);
 
+        //Adding Burger to arraylist
+        Burger Basic=(new Burger("Basic",
+                "With White With Chicken",3.56
+                ,4));
+
+        Burger Healthy=new Burger("Healthy",
+                "With Brown Rye With Bacon",5.67
+                ,6);
+
+        Burger Deluxe=new Burger("Deluxe",
+                "With White with Sausage",14.54
+                ,2);
+
         //Adding Burger To Combo Box
         DefaultComboBoxModel combomodel= new DefaultComboBoxModel();
-
-        // Basic Burger
-        combomodel.addElement(new Burger("Basic",
-                "With White With Chicken",3.56
-        ,4));
-
-        //Healthy Burger
-        combomodel.addElement(new Burger("Healthy",
-                "With Brown Rye With Bacon",5.67
-                ,6));
-
-
-        //Deluxe Burger
-        combomodel.addElement(new Burger("Deluxe",
-                "With White with Sausage",14.54
-                ,2));
+        combomodel.addElement(Basic.getType_of_Burger()+" Burger. Price-" + Basic.getPrice_of_burger());
+        combomodel.addElement(Healthy.getType_of_Burger()+" Burger. Price-" + Healthy.getPrice_of_burger());
+        combomodel.addElement(Deluxe.getType_of_Burger()+" Burger. Price-" + Deluxe.getPrice_of_burger());
 
         //Setting the model to burger box
         Burger_box.setModel(combomodel);
+        Burger_box.setSelectedIndex(-1);
 
 
 
@@ -69,7 +72,7 @@ public class UserPannel extends JPanel {
 
         gc.gridy++;
         gc.weighty=1;
-        gc.insets= new Insets(00,0,300,0);
+        gc.insets= new Insets(0,100,300,0);
         add(Burger_box,gc);
 
 
