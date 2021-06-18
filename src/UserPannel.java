@@ -16,49 +16,48 @@ public class UserPannel extends JPanel implements ActionListener {
     private JLabel Topping_label;
 
 
-    public UserPannel()
-    {
-        Dimension dim= getPreferredSize();
-        dim.width=360;
+    public UserPannel() {
+        Dimension dim = getPreferredSize();
+        dim.width = 360;
         setPreferredSize(dim);
 
         //Intiliazing Members Variables
-        burger_label= new JLabel("Select Your Burger");
-        Burger_box= new JComboBox();
-        subbtn= new JButton("Submit");
-        Topping_label= new JLabel("Add Some Toppings");
+        burger_label = new JLabel("Select Your Burger");
+        Burger_box = new JComboBox();
+        subbtn = new JButton("Submit");
+        Topping_label = new JLabel("Add Some Toppings");
 
 
         //Calling Action Listner
         subbtn.addActionListener(this);
 
         //Adding Border to Display The Order Pannel
-       TitledBorder innerborder= BorderFactory.createTitledBorder("Order Here");
-       innerborder.setTitleJustification(TitledBorder.CENTER);
-        Border outerborder=BorderFactory.createEmptyBorder(5,5,5,5);
-        Border fullborder=BorderFactory.createCompoundBorder(outerborder,innerborder);
+        TitledBorder innerborder = BorderFactory.createTitledBorder("Order Here");
+        innerborder.setTitleJustification(TitledBorder.CENTER);
+        Border outerborder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
+        Border fullborder = BorderFactory.createCompoundBorder(outerborder, innerborder);
         setBorder(fullborder);
 
         //Adding Burger to arraylist
-        ArrayList<Burger> Bur_ele= new ArrayList<Burger>();
-        Burger Basic=(new Burger("Basic",
-                "With White With Chicken",3.56
-                ,4));
+        ArrayList<Burger> Bur_ele = new ArrayList<Burger>();
+        Burger Basic = (new Burger("Basic",
+                "With White With Chicken", 3.56
+                , 4));
 
-        Burger Healthy=new Burger("Healthy",
-                "With Brown Rye With Bacon",5.67
-                ,6);
+        Burger Healthy = new Burger("Healthy",
+                "With Brown Rye With Bacon", 5.67
+                , 6);
 
-        Burger Deluxe=new Burger("Deluxe",
-                "With White with Sausage",14.54
-                ,2);
+        Burger Deluxe = new Burger("Deluxe",
+                "With White with Sausage", 14.54
+                , 2);
         Bur_ele.add(Basic);
         Bur_ele.add(Healthy);
         Bur_ele.add(Deluxe);
 
 
         //Adding Burger To Combo Box
-        DefaultComboBoxModel combomodel= new DefaultComboBoxModel();
+        DefaultComboBoxModel combomodel = new DefaultComboBoxModel();
         combomodel.addElement(Bur_ele.get(0));
         combomodel.addElement(Bur_ele.get(1));
         combomodel.addElement(Bur_ele.get(2));
@@ -66,38 +65,41 @@ public class UserPannel extends JPanel implements ActionListener {
         //Setting the model to burger box
         Burger_box.setModel(combomodel);
         Burger_box.setSelectedIndex(-1);
+        Alligment();
 
+    }
 
-
-
-
-
-        //Adding Label In the user pannel using Grid Alligment
+        public void Alligment()
+        {
+            //Adding Label In the user pannel using Grid Alligment
             setLayout(new GridBagLayout());
             GridBagConstraints gc= new GridBagConstraints();
 
-        gc.weighty=1;
-        gc.weightx=1;
-        gc.fill=GridBagConstraints.FIRST_LINE_START;
+            gc.weighty=1;
+            gc.weightx=1;
+            gc.fill=GridBagConstraints.FIRST_LINE_START;
 
 
-        gc.gridx=0;
-        gc.gridy=0;
-        gc.anchor= GridBagConstraints.FIRST_LINE_START;
-        gc.insets= new Insets(20,130,0,0);
-        add(burger_label,gc);
+            gc.gridx=0;
+            gc.gridy=0;
+            gc.anchor= GridBagConstraints.FIRST_LINE_START;
+            gc.insets= new Insets(20,130,0,0);
+            add(burger_label,gc);
 
 
-        //Adding Drop Down Menu
-        gc.gridy++;
-        gc.weighty=1;
-        gc.insets= new Insets(0,40,300,0);
-        add(Burger_box,gc);
+            //Adding Drop Down Menu
+            gc.gridy++;
+            gc.weighty=1;
+            gc.insets= new Insets(0,40,300,0);
+            add(Burger_box,gc);
 
             //Adding a submit Button
-        gc.insets= new Insets(50,150,00,0);
-        add(subbtn, gc);
+            gc.insets= new Insets(50,150,00,0);
+            add(subbtn, gc);
 
+
+
+        }
 
 
 
@@ -106,7 +108,7 @@ public class UserPannel extends JPanel implements ActionListener {
 
 
 
-    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -126,11 +128,10 @@ public class UserPannel extends JPanel implements ActionListener {
 
             formListner.Form_Event_Trigger(fe);
             Burger_box.setSelectedIndex(-1);
-
-
             setLayout(new GridBagLayout());
-            GridBagConstraints gc= new GridBagConstraints();
-            add(Topping_label);
+            Alligment();
+//            GridBagConstraints gc= new GridBagConstraints();
+//            add(Topping_label);
 
         }
 
