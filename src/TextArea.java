@@ -20,7 +20,7 @@ public class TextArea extends JPanel {
        add(new JScrollPane(textArea), BorderLayout.CENTER);
         //Creating a Dimension to divide into half
        Dimension dim= new Dimension();
-       dim.width=190;
+       dim.width=220;
 
 
        //Setting dimension
@@ -32,7 +32,7 @@ public class TextArea extends JPanel {
 
         //Adding Border To Mention Display Area
         tittle= BorderFactory.createTitledBorder("Your Order Display");
-        tittle.setTitleJustification(TitledBorder.RIGHT);
+        tittle.setTitleJustification(TitledBorder.CENTER);
         Border outerborder=BorderFactory.createEmptyBorder(5,5,5,5);
         Border fullborder=BorderFactory.createCompoundBorder(outerborder,tittle);
         setBorder(fullborder);

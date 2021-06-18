@@ -40,8 +40,8 @@ public class Burger {
 
     @Override
     public String toString() {
-        return String.format(" %s %s, :- \n Cost-: $%.2f \n Maximum Topping: %d",this.getType_of_Burger(),
-                this.getContent_BUrger(),this.getPrice_of_burger(), this.getMax_topping());
+        return String.format(" %s -%s : $%.2f ",this.getType_of_Burger(),
+             this.getContent_BUrger(),   this.getPrice_of_burger());
     }
 
 //    public void setToppings(Topping top)

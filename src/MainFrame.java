@@ -24,6 +24,17 @@ public class MainFrame extends JFrame {
             user= new UserPannel();
             add(user,BorderLayout.WEST);
 
+
+            //Setting Formlistner
+            user.setFormListner(new FormListner() {
+                @Override
+                public void Form_Event_Trigger(FormEvent e) {
+
+                    textArea.SetText(String.valueOf(e));
+
+                }
+            });
+
             setSize(600,500);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setVisible(true);
