@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
 import javax.swing.border.Border;
+import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 
 public class UserPannel extends JPanel implements ActionListener {
@@ -15,17 +16,31 @@ public class UserPannel extends JPanel implements ActionListener {
     private FormListner formListner;
     private JLabel Topping_label;
 
+    public void settingsize(int num)
+    {
+        Dimension dim = getPreferredSize();
+        dim.width = num;
+        setPreferredSize(dim);
+    }
+
+    public void settingHeight(int num)
+    {
+        Dimension dim = getPreferredSize();
+        dim.height = num;
+        setPreferredSize(dim);
+    }
+
+
 
     public UserPannel() {
-        Dimension dim = getPreferredSize();
-        dim.width = 360;
-        setPreferredSize(dim);
+
+        settingsize(360);
 
         //Intiliazing Members Variables
         burger_label = new JLabel("Select Your Burger");
         Burger_box = new JComboBox();
         subbtn = new JButton("Submit");
-        Topping_label = new JLabel("Add Some Toppings");
+        Topping_label = new JLabel("Add Some Toppings -: ");
 
 
         //Calling Action Listner
@@ -67,39 +82,9 @@ public class UserPannel extends JPanel implements ActionListener {
         Burger_box.setSelectedIndex(-1);
         Alligment();
 
+
     }
 
-        public void Alligment()
-        {
-            //Adding Label In the user pannel using Grid Alligment
-            setLayout(new GridBagLayout());
-            GridBagConstraints gc= new GridBagConstraints();
-
-            gc.weighty=1;
-            gc.weightx=1;
-            gc.fill=GridBagConstraints.FIRST_LINE_START;
-
-
-            gc.gridx=0;
-            gc.gridy=0;
-            gc.anchor= GridBagConstraints.FIRST_LINE_START;
-            gc.insets= new Insets(20,130,0,0);
-            add(burger_label,gc);
-
-
-            //Adding Drop Down Menu
-            gc.gridy++;
-            gc.weighty=1;
-            gc.insets= new Insets(0,40,300,0);
-            add(Burger_box,gc);
-
-            //Adding a submit Button
-            gc.insets= new Insets(50,150,00,0);
-            add(subbtn, gc);
-
-
-
-        }
 
 
 
@@ -112,7 +97,10 @@ public class UserPannel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-      Burger User_select= (Burger) Burger_box.getSelectedItem();
+        try {
+            Burger User_select= (Burger) Burger_box.getSelectedItem();
+
+
 
 
 
@@ -128,17 +116,67 @@ public class UserPannel extends JPanel implements ActionListener {
 
             formListner.Form_Event_Trigger(fe);
             Burger_box.setSelectedIndex(-1);
-            setLayout(new GridBagLayout());
-            Alligment();
-//            GridBagConstraints gc= new GridBagConstraints();
-//            add(Topping_label);
+
+            Border bor= BorderFactory.createLineBorder(Color.BLACK);
+            setBorder(bor);
+
+
+
+            setLayout(new BorderLayout());
+            add(Topping_label,BorderLayout.CENTER);
+
+
+
+
+
 
         }
-
+        }catch (Exception ex)
+        {
+            JOptionPane.showMessageDialog(null,
+                    "Please Select An option",
+                    "Error",JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 
     public void setFormListner(FormListner formListner) {
         this.formListner = formListner;
     }
+
+
+    public void Alligment()
+    {
+        //Adding Label In the user pannel using Grid Alligment
+        setLayout(new GridBagLayout());
+        GridBagConstraints gc= new GridBagConstraints();
+
+        gc.weighty=1;
+        gc.weightx=1;
+        gc.fill=GridBagConstraints.FIRST_LINE_START;
+
+
+        gc.gridx=0;
+        gc.gridy=0;
+        gc.anchor= GridBagConstraints.FIRST_LINE_START;
+        gc.insets= new Insets(20,130,0,0);
+        add(burger_label,gc);
+
+
+        //Adding Drop Down Menu
+        gc.gridy++;
+        gc.weighty=1;
+        gc.insets= new Insets(0,40,300,0);
+        add(Burger_box,gc);
+
+        //Adding a submit Button
+        gc.insets= new Insets(50,150,00,0);
+        add(subbtn, gc);
+
+
+
+    }
+
 }
+
+
