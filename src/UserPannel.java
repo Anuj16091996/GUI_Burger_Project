@@ -30,6 +30,18 @@ public class UserPannel extends JPanel implements ActionListener {
         setPreferredSize(dim);
     }
 
+    public void dropdown(JLabel label, GridBagConstraints gc, int anchor)
+    {
+        gc.gridx=0;
+        gc.gridy++;
+        gc.weighty=0.1;
+        gc.anchor=anchor;
+        gc.insets=new Insets(0,0,0,0);
+        add(label,gc);
+
+    }
+
+
 
 
     public UserPannel() {
@@ -151,30 +163,36 @@ public class UserPannel extends JPanel implements ActionListener {
         setLayout(new GridBagLayout());
         GridBagConstraints gc= new GridBagConstraints();
 
-        gc.weighty=1;
+        gc.weighty=0.1;
         gc.weightx=1;
-        gc.fill=GridBagConstraints.FIRST_LINE_START;
+        gc.fill=GridBagConstraints.NONE;
 
 
-        gc.gridx=0;
+        gc.gridx=1;
         gc.gridy=0;
-        gc.anchor= GridBagConstraints.FIRST_LINE_START;
-        gc.insets= new Insets(20,130,0,0);
+//        gc.anchor= GridBagConstraints.CENTER;
+        gc.insets= new Insets(0,0,0,0);
         add(burger_label,gc);
 
 
         //Adding Drop Down Menu
         gc.gridy++;
-        gc.weighty=1;
-        gc.insets= new Insets(0,40,300,0);
+
+        gc.weighty=0.1;
+//        gc.anchor=GridBagConstraints.HORIZONTAL;
         add(Burger_box,gc);
 
         //Adding a submit Button
-        gc.insets= new Insets(50,150,00,0);
+
+        gc.gridy++;
+
+        gc.weighty=2;
+        gc.anchor=GridBagConstraints.FIRST_LINE_END;
+        gc.insets= new Insets(0,0,00,120);
         add(subbtn, gc);
 
 
-
+        gc.insets= new Insets(0,0,00,0);
     }
 
 }
