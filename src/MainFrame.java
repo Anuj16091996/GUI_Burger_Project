@@ -32,6 +32,7 @@ public class MainFrame extends JFrame {
 
                     textArea.SetText(String.valueOf(e));
 
+
                 }
             });
 

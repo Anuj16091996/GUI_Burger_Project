@@ -15,6 +15,16 @@ public class UserPannel extends JPanel implements ActionListener {
     ArrayList<Burger>burger= new ArrayList<Burger>();
     private FormListner formListner;
     private JLabel Topping_label;
+    ArrayList<Topping> toppings= new ArrayList<>();
+    private JLabel tomoto_label;
+    private JLabel lettuce_label;
+    private JLabel Cheese_label;
+    private JLabel Carrot_label;
+    private JButton Topping_subbtn;
+    private TextField tom_feild;
+    private TextField lec_feild;
+    private TextField chee_feild;
+    private TextField carr_feild;
 
     public void settingsize(int num)
     {
@@ -52,7 +62,18 @@ public class UserPannel extends JPanel implements ActionListener {
         burger_label = new JLabel("Select Your Burger");
         Burger_box = new JComboBox();
         subbtn = new JButton("Submit");
-        Topping_label = new JLabel("Add Some Toppings -: ");
+
+        tomoto_label= new JLabel("Tomoto :- ");
+        lettuce_label= new JLabel("Letuce :-  ");
+        Cheese_label= new JLabel("Cheese :- ");
+        Carrot_label= new JLabel("Carrot :- ");
+        Topping_subbtn=new JButton("Submit");
+
+        tom_feild= new TextField(2);
+        lec_feild= new TextField(2);
+        chee_feild= new TextField(2);
+        carr_feild= new TextField(2);
+
 
 
         //Calling Action Listner
@@ -81,6 +102,21 @@ public class UserPannel extends JPanel implements ActionListener {
         Bur_ele.add(Basic);
         Bur_ele.add(Healthy);
         Bur_ele.add(Deluxe);
+
+
+
+        //Adding Topping to arraylist
+        ArrayList<Topping> toppings= new ArrayList<>();
+
+        Topping Tomoto= new Topping("Tomato", 0.27);
+        Topping Letcue= new Topping("Lettuce",0.72 );
+        Topping Cheese = new Topping("Cheese",1.13 );
+        Topping Carrot= new Topping("Carrot",2.75 );
+
+        toppings.add(Tomoto);
+        toppings.add(Letcue);
+        toppings.add(Cheese);
+        toppings.add(Carrot);
 
 
         //Adding Burger To Combo Box
@@ -123,26 +159,18 @@ public class UserPannel extends JPanel implements ActionListener {
 
         if(formListner!= null)
         {
-
-
-
             formListner.Form_Event_Trigger(fe);
             Burger_box.setSelectedIndex(-1);
+            Topping_label = new JLabel("Add "+ User_select.getMax_topping() +"Toppings -: ");
 
             Border bor= BorderFactory.createLineBorder(Color.BLACK);
             setBorder(bor);
-
-
-
-            setLayout(new BorderLayout());
-            add(Topping_label,BorderLayout.CENTER);
-
-
-
-
+            ALligment_2();
 
 
         }
+
+
         }catch (Exception ex)
         {
             JOptionPane.showMessageDialog(null,
@@ -191,8 +219,87 @@ public class UserPannel extends JPanel implements ActionListener {
         gc.insets= new Insets(0,0,00,120);
         add(subbtn, gc);
 
+    }
 
-        gc.insets= new Insets(0,0,00,0);
+
+
+    public void ALligment_2()
+    {
+        setLayout(new GridBagLayout());
+        GridBagConstraints gc= new GridBagConstraints();
+        Alligment();
+
+
+        gc.weighty=0.1;
+        gc.weightx=0.1;
+        gc.fill=GridBagConstraints.NONE;
+
+
+        gc.gridx=1;
+        gc.gridy=2;
+//        gc.anchor= GridBagConstraints.CENTER;
+        gc.insets= new Insets(0,0,0,50);
+//            add(burger_label,gc);
+
+        add(Topping_label,gc);
+
+        gc.gridx=0;
+        gc.gridy++;
+//            gc.anchor=GridBagConstraints.CENTER;
+        gc.insets= new Insets(0,20,00,0);
+        add(tomoto_label,gc);
+
+
+
+        gc.gridx++;
+
+        gc.insets= new Insets(0,0,00,10);
+        add(tom_feild,gc);
+
+
+        gc.gridx=0;
+        gc.gridy++;
+        gc.insets= new Insets(0,20,00,0);
+        add(lettuce_label,gc);
+
+        gc.gridx++;
+        gc.insets= new Insets(0,0,00,10);
+        add(lec_feild,gc);
+
+
+
+        gc.gridx=0;
+        gc.gridy++;
+        gc.insets= new Insets(0,20,00,0);
+        add(Carrot_label,gc);
+
+        gc.gridx++;
+        gc.insets= new Insets(0,0,00,10);
+        add(carr_feild,gc);
+
+
+
+        gc.gridx=0;
+        gc.gridy++;
+        gc.insets= new Insets(0,20,00,0);
+        add(Cheese_label,gc);
+
+        gc.gridx++;
+        gc.insets= new Insets(0,0,00,10);
+        add(chee_feild,gc);
+
+        gc.gridx=1;
+        gc.gridy++;
+        gc.weighty=1;
+//            gc.anchor=GridBagConstraints.FIRST_LINE_END;
+//            gc.insets= new Insets(50,0,00,120);
+        add(Topping_subbtn,gc);
+
+
+
+
+
+
     }
 
 }

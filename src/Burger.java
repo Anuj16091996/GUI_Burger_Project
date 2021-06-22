@@ -7,7 +7,7 @@ public class Burger {
     private String Content_BUrger;
     private Double price_of_burger;
     private Integer max_topping;
-//    private ArrayList<Topping> toppings = new ArrayList<>();
+    private ArrayList<Topping> toppings = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -44,15 +44,15 @@ public class Burger {
              this.getContent_BUrger(),   this.getPrice_of_burger());
     }
 
-//    public void setToppings(Topping top)
-//    {
-//        this.toppings.add(top);
-//    }
-//
-//    public ArrayList<Topping>getToppings()
-//    {
-//        return this.toppings;
-//    }
+    public void setToppings(Topping top)
+    {
+        this.toppings.add(top);
+    }
+
+    public ArrayList<Topping>getToppings()
+    {
+        return this.toppings;
+    }
 }
 
 
