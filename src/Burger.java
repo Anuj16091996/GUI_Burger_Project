@@ -2,46 +2,46 @@ import java.util.ArrayList;
 
 public class Burger {
     private int id;
-    private static int ids=1;
-    private String Type_of_Burger;
-    private String Content_BUrger;
-    private Double price_of_burger;
-    private Integer max_topping;
+    private static int ids=0;
+    private String typeOfBurger;
+    private String contentBurger;
+    private Double priceOfBurger;
+    private Integer maxToppings;
     private ArrayList<Topping> toppings = new ArrayList<>();
 
     public int getId() {
         return id;
     }
 
-    public Burger(String type_of_Burger,String Content_BUrger, double price_of_burger, int max_topping)
+    public Burger(String typeOfBurger,String contentBurger, double priceOfBurger, int maxToppings)
     {
         this.id=ids++;
-        this.Type_of_Burger = type_of_Burger;
-        this.Content_BUrger=Content_BUrger;
-        this.price_of_burger = price_of_burger;
-        this.max_topping = max_topping;
+        this.typeOfBurger = typeOfBurger;
+        this.contentBurger=contentBurger;
+        this.priceOfBurger = priceOfBurger;
+        this.maxToppings = maxToppings;
     }
 
-    public String getContent_BUrger() {
-        return Content_BUrger;
+    public String getContentBurger() {
+        return contentBurger;
     }
 
-    public String getType_of_Burger() {
-        return Type_of_Burger;
+    public String getTypeOfBurger() {
+        return typeOfBurger;
     }
 
-    public Double getPrice_of_burger() {
-        return price_of_burger;
+    public Double getPriceOfBurger() {
+        return priceOfBurger;
     }
 
-    public Integer getMax_topping() {
-        return max_topping;
+    public Integer getMaxToppings() {
+        return maxToppings;
     }
 
     @Override
     public String toString() {
-        return String.format(" %s -%s : $%.2f ",this.getType_of_Burger(),
-             this.getContent_BUrger(),   this.getPrice_of_burger());
+        return String.format(" %s -%s : $%.2f ",this.getTypeOfBurger(),
+             this.getContentBurger(),   this.getPriceOfBurger());
     }
 
     public void setToppings(Topping top)

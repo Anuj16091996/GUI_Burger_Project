@@ -1,27 +1,25 @@
 import javax.swing.*;
 import javax.swing.border.Border;
-import java.awt.*;
-import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import java.awt.*;
 
 public class TextArea extends JPanel {
 
     private JTextArea textArea;
-    private  TitledBorder tittle;
-
+    private  TitledBorder title;
 
     public TextArea()
     {
-        //Intilaize Fields
+        //Initialize Fields
         textArea= new JTextArea();
 
         //Setting Layouts
        setLayout(new BorderLayout());
        add(new JScrollPane(textArea), BorderLayout.CENTER);
-        //Creating a Dimension to divide into half
+
+       //Creating a Dimension to divide into half
        Dimension dim= new Dimension();
        dim.width=220;
-
 
        //Setting dimension
        setPreferredSize(dim);
@@ -29,26 +27,20 @@ public class TextArea extends JPanel {
        //No Writing Option
         textArea.setEditable(false);
 
-
         //Adding Border To Mention Display Area
-        tittle= BorderFactory.createTitledBorder("Your Order Display");
-        tittle.setTitleJustification(TitledBorder.CENTER);
-        Border outerborder=BorderFactory.createEmptyBorder(5,5,5,5);
-        Border fullborder=BorderFactory.createCompoundBorder(outerborder,tittle);
-        setBorder(fullborder);
-
-
-
-
+        title = BorderFactory.createTitledBorder("Order Here");
+        title.setTitleJustification(TitledBorder.CENTER);
+        Border outerBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
+        Border fullBorder = BorderFactory.createCompoundBorder(outerBorder, title);
+        setBorder(fullBorder);
     }
 
-    public void AppendText(String str)
+    public void appendText(String str)
     {
         textArea.append(str);
     }
 
-
-    public void SetText(String str)
+    public void setText(String str)
     {
         textArea.setText(str);
     }

@@ -1,32 +1,28 @@
 public class Topping {
     private int  id;
-    private static int ids=1;
-    private String Topping_Name;
-    private double Topping_price;
+    private static int ids=0;
+    private String name;
+    private double price;
 
-
-    public Topping(String topping_Name, double topping_price)
+    public Topping(String name, double price)
     {
         this.id=ids++;
-        this.Topping_Name = topping_Name;
-        this.Topping_price = topping_price;
+        this.name = name;
+        this.price = price;
     }
 
-
-
-    public String getTopping_Name() {
-        return Topping_Name;
+    public String getName() {
+        return name;
     }
 
-    public double getTopping_price() {
-        return Topping_price;
+    public double getPrice() {
+        return price;
     }
 
 
     @Override
     public String toString()
     {
-        return String.format(" %s : $%.2f ", this.getTopping_Name(), this.getTopping_price());
-
+        return String.format(" %s : $%.2f ", this.getName(), this.getPrice());
     }
 }
