@@ -53,6 +53,23 @@ public class Burger {
     {
         return this.toppings;
     }
+
+    public double priceWithToppings(){
+        double total = 0;
+        for (Topping t: toppings){
+            total += t.getPrice();
+        }
+        total += priceOfBurger;
+        return total;
+    }
+
+    public String getName() {
+        return typeOfBurger;
+    }
+
+    public Double getPrice() {
+        return priceOfBurger;
+    }
 }
 
 

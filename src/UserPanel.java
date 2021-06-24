@@ -15,6 +15,7 @@ public class UserPanel extends JPanel {
     private ArrayList<Burger> burgers;
 
     private FormListener formListener;
+    private FormListener2 formListener2;
 
     private JLabel toppingsLabel;
     ArrayList<Topping> toppings;
@@ -37,9 +38,7 @@ public class UserPanel extends JPanel {
     private JButton cheeseMinus;
     private JButton carrotPlus;
     private JButton carrotMinus;
-
-    private ToppingSection toppingSection;
-    private BurgerSection burgerSection;
+    private  ArrayList<Topping> toppingsSelected;
 
     public void settingSize(int num)
     {
@@ -138,6 +137,46 @@ public class UserPanel extends JPanel {
             }
         });
 
+        toppingsSubmit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+
+                    for (int i=0; i<Integer.valueOf(tomatoField.getText()); i++){
+                        burgersSelected.get(0).setToppings(toppings.get(0));
+                    }
+                    for (int i=0; i<Integer.valueOf(lettuceField.getText()); i++){
+                        burgersSelected.get(0).setToppings(toppings.get(1));
+                    }
+                    for (int i=0; i<Integer.valueOf(cheeseField.getText()); i++){
+                        burgersSelected.get(0).setToppings(toppings.get(2));
+                    }
+                    for (int i=0; i<Integer.valueOf(carrotField.getText()); i++){
+                        burgersSelected.get(0).setToppings(toppings.get(3));
+                    }
+
+                    //Calling Form Event
+                    FormEvent2 fe = new FormEvent2(e,burgersSelected);
+
+                    //Checking That FormListener is not null
+                    if(formListener2!= null)
+                    {
+                        formListener2.Form_Event_Trigger(fe);
+                    }
+                    toppingsSubmit.setEnabled(false);
+
+                    JOptionPane.showMessageDialog(null,
+                            "Thank you for your order",
+                            "Successfully ordered",JOptionPane.INFORMATION_MESSAGE);
+                }catch (Exception ex)
+                {
+                    JOptionPane.showMessageDialog(null,
+                            "Error",
+                            "Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
         //Adding Border to Display The Order Panel
         setBorder(createBorder("Order Here"));
 
@@ -167,10 +206,6 @@ public class UserPanel extends JPanel {
             comboModel.addElement(b);
         }
 
-        //Setting the model to burger box
-        burgerBox.setModel(comboModel);
-        burgerBox.setSelectedIndex(-1);
-        alignment();
         DocumentListener changesOnField = new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
                 warn();
@@ -244,6 +279,12 @@ public class UserPanel extends JPanel {
         lettuceField.getDocument().addDocumentListener(changesOnField);
         cheeseField.getDocument().addDocumentListener(changesOnField);
         tomatoField.getDocument().addDocumentListener(changesOnField);
+
+
+        //Setting the model to burger box
+        burgerBox.setModel(comboModel);
+        burgerBox.setSelectedIndex(-1);
+        alignment();
     }
 
     public void addingAction(JButton buttonPlus, JButton buttonMinus, JTextField textField){
@@ -252,6 +293,8 @@ public class UserPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 int max = burgersSelected.get(0).getMaxToppings();
                 int toppingsSelected = 0;
+                Border bor= BorderFactory.createLineBorder(Color.BLACK);
+                setBorder(bor);
                 if (!(tomatoField.getText().isEmpty()))
                     toppingsSelected += Integer.valueOf(tomatoField.getText());
                 if (!(lettuceField.getText().isEmpty()))
@@ -314,6 +357,10 @@ public class UserPanel extends JPanel {
 
     public void setFormListener(FormListener formListener) {
         this.formListener = formListener;
+    }
+
+    public void setFormListener2(FormListener2 formListener) {
+        this.formListener2 = formListener;
     }
 
     public void addComponent(Component component, double weighty, double weightx, int gridy, int gridx, int gridwidth, int fill){

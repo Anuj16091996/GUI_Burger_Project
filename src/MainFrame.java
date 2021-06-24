@@ -30,6 +30,12 @@ public class MainFrame extends JFrame {
                     textArea.setText(String.valueOf(e));
                 }
             });
+            user.setFormListener2(new FormListener2() {
+                @Override
+                public void Form_Event_Trigger(FormEvent2 e) {
+                    textArea.setText(String.valueOf(e));
+                }
+            });
             setMinimumSize(new Dimension(600,500));
             setSize(600,500);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

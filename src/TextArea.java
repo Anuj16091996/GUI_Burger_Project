@@ -19,7 +19,7 @@ public class TextArea extends JPanel {
 
        //Creating a Dimension to divide into half
        Dimension dim= new Dimension();
-       dim.width=220;
+       dim.width=270;
 
        //Setting dimension
        setPreferredSize(dim);
