@@ -28,7 +28,7 @@ public class TextArea extends JPanel {
         textArea.setEditable(false);
 
         //Adding Border To Mention Display Area
-        title = BorderFactory.createTitledBorder("Order Here");
+        title = BorderFactory.createTitledBorder("Your Order");
         title.setTitleJustification(TitledBorder.CENTER);
         Border outerBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
         Border fullBorder = BorderFactory.createCompoundBorder(outerBorder, title);

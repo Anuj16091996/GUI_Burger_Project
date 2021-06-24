@@ -1,16 +1,18 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class UserPanel extends JPanel implements ActionListener {
+public class UserPanel extends JPanel {
     private JLabel burgerLabel;
     private JComboBox burgerBox;
     private JButton burgerSubmit;
-    ArrayList<Burger> burgers;
+    private ArrayList<Burger> burgers;
 
     private FormListener formListener;
 
@@ -21,10 +23,23 @@ public class UserPanel extends JPanel implements ActionListener {
     private JLabel cheeseLabel;
     private JLabel carrotLabel;
     private JButton toppingsSubmit;
-    private TextField tomatoField;
-    private TextField lettuceField;
-    private TextField cheeseField;
-    private TextField carrotField;
+    private JTextField tomatoField;
+    private JTextField lettuceField;
+    private JTextField cheeseField;
+    private JTextField carrotField;
+    private  ArrayList<Burger> burgersSelected;
+
+    private JButton tomatoPlus;
+    private JButton tomatoMinus;
+    private JButton lettucePlus;
+    private JButton lettuceMinus;
+    private JButton cheesePlus;
+    private JButton cheeseMinus;
+    private JButton carrotPlus;
+    private JButton carrotMinus;
+
+    private ToppingSection toppingSection;
+    private BurgerSection burgerSection;
 
     public void settingSize(int num)
     {
@@ -42,16 +57,16 @@ public class UserPanel extends JPanel implements ActionListener {
 
     public void dropdown(JLabel label, GridBagConstraints gc, int anchor)
     {
-        gc.gridx=0;
+        gc.gridx = 0;
         gc.gridy++;
-        gc.weighty=0.1;
-        gc.anchor=anchor;
-        gc.insets=new Insets(0,0,0,0);
+        gc.weighty = 0.1;
+        gc.anchor = anchor;
+        gc.insets = new Insets(0,0,0,0);
         add(label,gc);
-
     }
 
     public UserPanel() {
+        setLayout(new GridBagLayout());
 
         settingSize(360);
 
@@ -60,26 +75,71 @@ public class UserPanel extends JPanel implements ActionListener {
         burgerBox = new JComboBox();
         burgerSubmit = new JButton("Submit");
 
-        tomatoLabel= new JLabel("Tomato :- ");
-        lettuceLabel= new JLabel("Lettuce :-  ");
-        cheeseLabel= new JLabel("Cheese :- ");
-        carrotLabel= new JLabel("Carrot :- ");
-        toppingsSubmit=new JButton("Submit");
 
-        tomatoField= new TextField(2);
-        lettuceField= new TextField(2);
-        cheeseField= new TextField(2);
-        carrotField= new TextField(2);
+        tomatoLabel = new JLabel("Tomato: ");
+        tomatoMinus = new JButton("—");
+        tomatoField = new JTextField("0");
+        tomatoField.setEditable(false);
+        tomatoPlus = new JButton("+");
+        addingAction(tomatoPlus,tomatoMinus,tomatoField);
+
+        lettuceLabel = new JLabel("Lettuce: ");
+        lettuceMinus = new JButton("—");
+        lettuceField = new JTextField("0");
+        lettuceField.setEditable(false);
+        lettucePlus = new JButton("+");
+        addingAction(lettucePlus,lettuceMinus,lettuceField);
+
+        cheeseLabel = new JLabel("Cheese: ");
+        cheeseMinus = new JButton("—");
+        cheeseField = new JTextField("0");
+        cheeseField.setEditable(false);
+        cheesePlus = new JButton("+");
+        addingAction(cheesePlus,cheeseMinus,cheeseField);
+
+        carrotLabel = new JLabel("Carrot: ");
+        carrotMinus = new JButton("—");
+        carrotField = new JTextField("0");
+        carrotField.setEditable(false);
+        carrotPlus = new JButton("+");
+        addingAction(carrotPlus,carrotMinus,carrotField);
+
+        toppingsSubmit = new JButton("Submit");
 
         //Calling Action Listener
-        burgerSubmit.addActionListener(this);
+        burgerSubmit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Burger userSelection= (Burger) burgerBox.getSelectedItem();
+
+                    //Calling Form Event
+                    FormEvent fe = new FormEvent(e,userSelection);
+
+                    //Checking That FormListener is not null
+                    if(formListener!= null)
+                    {
+                        burgersSelected.add(userSelection);
+                        formListener.Form_Event_Trigger(fe);
+                        burgerBox.setEnabled(false);
+                        burgerSubmit.setEnabled(false);
+                        toppingsLabel = new JLabel("Add "+ userSelection.getMaxToppings() +" toppings -: ");
+
+                        Border bor= BorderFactory.createLineBorder(Color.BLACK);
+                        setBorder(bor);
+                        alignment_2();
+                    }
+                }catch (Exception ex)
+                {
+                    JOptionPane.showMessageDialog(null,
+                            "Please Select An option",
+                            "Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
         //Adding Border to Display The Order Panel
-        TitledBorder innerBorder = BorderFactory.createTitledBorder("Order Here");
-        innerBorder.setTitleJustification(TitledBorder.CENTER);
-        Border outerBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-        Border fullBorder = BorderFactory.createCompoundBorder(outerBorder, innerBorder);
-        setBorder(fullBorder);
+        setBorder(createBorder("Order Here"));
 
         //Adding Burger to arraylist
         burgers = new ArrayList<Burger>();
@@ -100,159 +160,212 @@ public class UserPanel extends JPanel implements ActionListener {
         toppings.add(new Topping("Cheese",1.13 ));
         toppings.add(new Topping("Carrot",2.75 ));
 
+        burgersSelected = new ArrayList<>();
         //Adding Burger To Combo Box
         DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
         for (Burger b: burgers) {
             comboModel.addElement(b);
         }
-        /*comboModel.addElement(burgers.get(0));
-        comboModel.addElement(burgers.get(1));
-        comboModel.addElement(burgers.get(2));*/
 
         //Setting the model to burger box
         burgerBox.setModel(comboModel);
         burgerBox.setSelectedIndex(-1);
         alignment();
+        DocumentListener changesOnField = new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                warn();
+            }
+            public void removeUpdate(DocumentEvent e) {
+                warn();
+            }
+            public void insertUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void warn() {
+                    /*JOptionPane.showMessageDialog(null,
+                            "This changed", "Error Message",
+                            JOptionPane.ERROR_MESSAGE);*/
+                int max = burgersSelected.get(0).getMaxToppings();
+                int toppingsSelected = 0;
+                if (!(tomatoField.getText().isEmpty()))
+                    toppingsSelected += Integer.valueOf(tomatoField.getText());
+                if (!(lettuceField.getText().isEmpty()))
+                    toppingsSelected += Integer.valueOf(lettuceField.getText());
+                if (!(cheeseField.getText().isEmpty()))
+                    toppingsSelected += Integer.valueOf(cheeseField.getText());
+                if (!(carrotField.getText().isEmpty()))
+                    toppingsSelected += Integer.valueOf(carrotField.getText());
+                System.out.println(String.format("Max: %d and Selected: %d",max,toppingsSelected));
+                if(toppingsSelected == max){
+                    if(Integer.valueOf(tomatoField.getText()) == 0){
+                        tomatoField.setEnabled(false);
+                        tomatoPlus.setEnabled(false);
+                        tomatoMinus.setEnabled(false);}
+                    if(Integer.valueOf(lettuceField.getText()) == 0){
+                        lettuceField.setEnabled(false);
+                        lettucePlus.setEnabled(false);
+                        lettuceMinus.setEnabled(false);}
+                    if(Integer.valueOf(carrotField.getText()) == 0){
+                        carrotField.setEnabled(false);
+                        carrotPlus.setEnabled(false);
+                        carrotMinus.setEnabled(false);}
+                    if(Integer.valueOf(cheeseField.getText()) == 0){
+                        cheeseField.setEnabled(false);
+                        cheesePlus.setEnabled(false);
+                        cheeseMinus.setEnabled(false);}
+                } else if(toppingsSelected > max) {
+                    tomatoField.setText("0");
+                    lettuceField.setText("0");
+                    carrotField.setText("0");
+                    cheeseField.setText("0");
+                    JOptionPane.showMessageDialog(null,
+                            "You have tried to add more topping than limit allowed", "Error Message",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    carrotField.setEnabled(true);
+                    carrotPlus.setEnabled(true);
+                    carrotMinus.setEnabled(true);
+                    cheeseField.setEnabled(true);
+                    cheesePlus.setEnabled(true);
+                    cheeseMinus.setEnabled(true);
+                    lettuceField.setEnabled(true);
+                    lettucePlus.setEnabled(true);
+                    lettuceMinus.setEnabled(true);
+                    tomatoField.setEnabled(true);
+                    tomatoPlus.setEnabled(true);
+                    tomatoMinus.setEnabled(true);
+                }
+            }
+        };
+
+        carrotField.getDocument().addDocumentListener(changesOnField);
+        lettuceField.getDocument().addDocumentListener(changesOnField);
+        cheeseField.getDocument().addDocumentListener(changesOnField);
+        tomatoField.getDocument().addDocumentListener(changesOnField);
     }
 
-//        setBorder(BorderFactory.createTitledBorder("Brampton Burgers"));
+    public void addingAction(JButton buttonPlus, JButton buttonMinus, JTextField textField){
+        buttonPlus.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int max = burgersSelected.get(0).getMaxToppings();
+                int toppingsSelected = 0;
+                if (!(tomatoField.getText().isEmpty()))
+                    toppingsSelected += Integer.valueOf(tomatoField.getText());
+                if (!(lettuceField.getText().isEmpty()))
+                    toppingsSelected += Integer.valueOf(lettuceField.getText());
+                if (!(cheeseField.getText().isEmpty()))
+                    toppingsSelected += Integer.valueOf(cheeseField.getText());
+                if (!(carrotField.getText().isEmpty()))
+                    toppingsSelected += Integer.valueOf(carrotField.getText());
+                System.out.println(String.format("Max: %d and Selected: %d",max,toppingsSelected));
+                if(toppingsSelected == max){
+                    if(Integer.valueOf(tomatoField.getText()) == 0){
+                        tomatoField.setEnabled(false);
+                        tomatoPlus.setEnabled(false);
+                        tomatoMinus.setEnabled(false);}
+                    if(Integer.valueOf(lettuceField.getText()) == 0){
+                        lettuceField.setEnabled(false);
+                        lettucePlus.setEnabled(false);
+                        lettuceMinus.setEnabled(false);}
+                    if(Integer.valueOf(carrotField.getText()) == 0){
+                        carrotField.setEnabled(false);
+                        carrotPlus.setEnabled(false);
+                        carrotMinus.setEnabled(false);}
+                    if(Integer.valueOf(cheeseField.getText()) == 0){
+                        cheeseField.setEnabled(false);
+                        cheesePlus.setEnabled(false);
+                        cheeseMinus.setEnabled(false);}
+                }
+                else {
+                    carrotField.setEnabled(true);
+                    carrotPlus.setEnabled(true);
+                    carrotMinus.setEnabled(true);
+                    cheeseField.setEnabled(true);
+                    cheesePlus.setEnabled(true);
+                    cheeseMinus.setEnabled(true);
+                    lettuceField.setEnabled(true);
+                    lettucePlus.setEnabled(true);
+                    lettuceMinus.setEnabled(true);
+                    tomatoField.setEnabled(true);
+                    tomatoPlus.setEnabled(true);
+                    tomatoMinus.setEnabled(true);
+                    textField.setText(String.valueOf(Integer.valueOf(textField.getText()) + 1));
+                }
+            }
+        });
+        buttonMinus.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(Integer.valueOf(textField.getText()) != 0)
+                    textField.setText(String.valueOf(Integer.valueOf(textField.getText()) - 1));
+            }
+        });
+    }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        try {
-            Burger userSelection= (Burger) burgerBox.getSelectedItem();
-
-        //Calling Form Event
-        FormEvent fe = new FormEvent(e,userSelection);
-
-        //Checking That FormListener is not null
-
-        if(formListener!= null)
-        {
-            formListener.Form_Event_Trigger(fe);
-            burgerBox.setSelectedIndex(-1);
-            toppingsLabel = new JLabel("Add "+ userSelection.getMaxToppings() +"Toppings -: ");
-
-            Border bor= BorderFactory.createLineBorder(Color.BLACK);
-            setBorder(bor);
-            alignment_2();
-        }
-        }catch (Exception ex)
-        {
-            JOptionPane.showMessageDialog(null,
-                    "Please Select An option",
-                    "Error",JOptionPane.ERROR_MESSAGE);
-        }
+    public Border createBorder(String title){
+        TitledBorder innerBorder = BorderFactory.createTitledBorder(title);
+        innerBorder.setTitleJustification(TitledBorder.CENTER);
+        Border outerBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
+        return BorderFactory.createCompoundBorder(outerBorder, innerBorder);
     }
 
     public void setFormListener(FormListener formListener) {
         this.formListener = formListener;
     }
 
+    public void addComponent(Component component, double weighty, double weightx, int gridy, int gridx, int gridwidth, int fill){
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.insets = new Insets(5,5,5,5);
+        gc.weighty = weighty;
+        gc.weightx = weightx;
+        gc.gridy = gridy;
+        gc.gridx = gridx;
+        gc.gridwidth = gridwidth;
+        gc.fill = fill;
+        add(component,gc);
+    }
+
     public void alignment()
     {
-        //Adding Label In the user Panel using Grid Alignment
-        setLayout(new GridBagLayout());
-        GridBagConstraints gc= new GridBagConstraints();
-
-        gc.weighty=0.1;
-        gc.weightx=1;
-        gc.fill=GridBagConstraints.NONE;
-
-        gc.gridx=1;
-        gc.gridy=0;
-//        gc.anchor= GridBagConstraints.CENTER;
-        gc.insets= new Insets(0,0,0,0);
-        add(burgerLabel,gc);
-
-
-        //Adding Drop Down Menu
-        gc.gridy++;
-
-        gc.weighty=0.1;
-//        gc.anchor=GridBagConstraints.HORIZONTAL;
-        add(burgerBox,gc);
-
-        //Adding a submit Button
-        gc.gridy++;
-
-        gc.weighty=2;
-        gc.anchor=GridBagConstraints.FIRST_LINE_END;
-        gc.insets= new Insets(0,0,00,120);
-        add(burgerSubmit, gc);
+        burgerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        addComponent(burgerLabel,1/12, 1,1,0,4,GridBagConstraints.HORIZONTAL);
+        addComponent(burgerBox,1/12, 1,2,0,4,GridBagConstraints.HORIZONTAL);
+        addComponent(burgerSubmit,1/12, 1,3,0,4,GridBagConstraints.NONE);
     }
 
     public void alignment_2()
     {
-        setLayout(new GridBagLayout());
-        GridBagConstraints gc= new GridBagConstraints();
         alignment();
 
+        toppingsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        addComponent(toppingsLabel,1/12, 1,5,0,4,GridBagConstraints.HORIZONTAL);
 
-        gc.weighty=0.1;
-        gc.weightx=0.1;
-        gc.fill=GridBagConstraints.NONE;
+        addComponent(tomatoLabel,1/12, 1,6,0,1,GridBagConstraints.LINE_END);
+        addComponent(tomatoMinus,1/12, 1,6,1,1,GridBagConstraints.NONE);
+        addComponent(tomatoField,1/12, 1,6,2,1,GridBagConstraints.HORIZONTAL);
+        addComponent(tomatoPlus,1/12, 1,6,3,1,GridBagConstraints.NONE);
 
+        addComponent(lettuceLabel,1/12, 1,7,0,1,GridBagConstraints.LINE_END);
+        addComponent(lettuceMinus,1/12, 1,7,1,1,GridBagConstraints.NONE);
+        addComponent(lettuceField,1/12, 1,7,2,1,GridBagConstraints.HORIZONTAL);
+        addComponent(lettucePlus,1/12, 1,7,3,1,GridBagConstraints.NONE);
 
-        gc.gridx=1;
-        gc.gridy=2;
-//        gc.anchor= GridBagConstraints.CENTER;
-        gc.insets= new Insets(0,0,0,50);
-//            add(burgerLabel,gc);
+        addComponent(carrotLabel,1/12, 1,8,0,1,GridBagConstraints.LINE_END);
+        addComponent(carrotMinus,1/12, 1,8,1,1,GridBagConstraints.NONE);
+        addComponent(carrotField,1/12, 1,8,2,1,GridBagConstraints.HORIZONTAL);
+        addComponent(carrotPlus,1/12, 1,8,3,1,GridBagConstraints.NONE);
 
-        add(toppingsLabel,gc);
+        addComponent(cheeseLabel,1/12, 1,9,0,1,GridBagConstraints.LINE_END);
+        addComponent(cheeseMinus,1/12, 1,9,1,1,GridBagConstraints.NONE);
+        addComponent(cheeseField,1/12, 1,9,2,1,GridBagConstraints.HORIZONTAL);
+        addComponent(cheesePlus,1/12, 1,9,3,1,GridBagConstraints.NONE);
 
-        gc.gridx=0;
-        gc.gridy++;
-//            gc.anchor=GridBagConstraints.CENTER;
-        gc.insets= new Insets(0,20,00,0);
-        add(tomatoLabel,gc);
+        addComponent(toppingsSubmit,1/12, 1,10,0,4,GridBagConstraints.NONE);
 
-
-
-        gc.gridx++;
-
-        gc.insets= new Insets(0,0,00,10);
-        add(tomatoField,gc);
-
-
-        gc.gridx=0;
-        gc.gridy++;
-        gc.insets= new Insets(0,20,00,0);
-        add(lettuceLabel,gc);
-
-        gc.gridx++;
-        gc.insets= new Insets(0,0,00,10);
-        add(lettuceField,gc);
-
-
-
-        gc.gridx=0;
-        gc.gridy++;
-        gc.insets= new Insets(0,20,00,0);
-        add(carrotLabel,gc);
-
-        gc.gridx++;
-        gc.insets= new Insets(0,0,00,10);
-        add(carrotField,gc);
-
-
-
-        gc.gridx=0;
-        gc.gridy++;
-        gc.insets= new Insets(0,20,00,0);
-        add(cheeseLabel,gc);
-
-        gc.gridx++;
-        gc.insets= new Insets(0,0,00,10);
-        add(cheeseField,gc);
-
-        gc.gridx=1;
-        gc.gridy++;
-        gc.weighty=1;
-//            gc.anchor=GridBagConstraints.FIRST_LINE_END;
-//            gc.insets= new Insets(50,0,00,120);
-        add(toppingsSubmit,gc);
+        setBorder(createBorder("Order Here"));
     }
 }
 
